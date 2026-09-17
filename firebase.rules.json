@@ -1,0 +1,122 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "config": {
+      ".read": "auth != null",
+      ".write": "auth != null && auth.uid == 'taRYAeJTz0Ps4cz5lQMWvIIsDJG2'"
+    },
+    "games": {
+      ".read": "auth != null",
+      "$table": {
+        ".write": "auth != null && newData.exists() && root.child('config').child('tables').child($table).exists()",
+        ".validate": "newData.hasChildren(['players','game','revision'])",
+        "players": {
+          ".validate": "newData.hasChildren(['0','1'])",
+          "$player": {
+            ".validate": "newData.hasChildren(['name','faction','command','army','rage','fury','baseVictory','tactics']) && ($player == '0' || $player == '1')",
+            "name": {
+              ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 60 && !newData.val().beginsWith('=') && !newData.val().beginsWith('+') && !newData.val().beginsWith('-') && !newData.val().beginsWith('@')"
+            },
+            "faction": {
+              ".validate": "newData.isString() && newData.val().length <= 200 && !newData.val().beginsWith('=') && !newData.val().beginsWith('+') && !newData.val().beginsWith('-') && !newData.val().beginsWith('@')"
+            },
+            "command": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000000 && newData.val() % 1 == 0"
+            },
+            "army": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000000 && newData.val() % 1 == 0"
+            },
+            "rage": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000000 && newData.val() % 1 == 0"
+            },
+            "fury": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000000 && newData.val() % 1 == 0"
+            },
+            "baseVictory": {
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000000 && newData.val() % 1 == 0"
+            },
+            "tactics": {
+              ".validate": "newData.hasChildren(['0','1'])",
+              "$slot": {
+                ".validate": "newData.hasChildren(['name','goals']) && ($slot == '0' || $slot == '1')",
+                "name": {
+                  ".validate": "newData.isString() && newData.val().length <= 200 && !newData.val().beginsWith('=') && !newData.val().beginsWith('+') && !newData.val().beginsWith('-') && !newData.val().beginsWith('@')"
+                },
+                "goals": {
+                  ".validate": "newData.hasChildren(['0','1','2'])",
+                  "$goal": {
+                    ".validate": "newData.isNumber() && (newData.val() == 0 || newData.val() == 5) && ($goal == '0' || $goal == '1' || $goal == '2')"
+                  }
+                },
+                "$other": {
+                  ".validate": false
+                }
+              }
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        },
+        "game": {
+          ".validate": "newData.hasChildren(['battleplan','turn','phase','active','starter','id']) && ((newData.child('turn').val() == 0 && newData.child('phase').val() == '-') || (newData.child('turn').val() > 0 && newData.child('phase').val() != '-'))",
+          "turn": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 5 && newData.val() % 1 == 0"
+          },
+          "phase": {
+            ".validate": "newData.isString() && (newData.val() == '-' || newData.val() == 'Top' || newData.val() == 'Bot' || newData.val() == 'END')"
+          },
+          "active": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 2 && newData.val() % 1 == 0"
+          },
+          "starter": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 2 && newData.val() % 1 == 0"
+          },
+          "battleplan": {
+            ".validate": "newData.isString() && newData.val().length <= 200 && !newData.val().beginsWith('=') && !newData.val().beginsWith('+') && !newData.val().beginsWith('-') && !newData.val().beginsWith('@')"
+          },
+          "id": {
+            ".validate": "newData.isString() && newData.val().length <= 80"
+          },
+          "history": {
+            ".validate": "true",
+            "$step": {
+              ".validate": "newData.hasChildren(['turn','phase','active','starter']) && $step.matches(/^([0-9]|1[0-4])$/)",
+              "turn": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 5 && newData.val() % 1 == 0"
+              },
+              "phase": {
+                ".validate": "newData.isString() && (newData.val() == '-' || newData.val() == 'Top' || newData.val() == 'Bot' || newData.val() == 'END')"
+              },
+              "active": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 2 && newData.val() % 1 == 0"
+              },
+              "starter": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 2 && newData.val() % 1 == 0"
+              },
+              "$other": {
+                ".validate": false
+              }
+            }
+          },
+          "$other": {
+            ".validate": false
+          }
+        },
+        "revision": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000000000 && newData.val() % 1 == 0"
+        },
+        "changeIds": {
+          ".validate": "true",
+          "$id": {
+            ".validate": "newData.isString() && newData.val().length <= 80 && $id.matches(/^([0-9]|1[0-9]|2[0-3])$/)"
+          }
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    }
+  }
+}
