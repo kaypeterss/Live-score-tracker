@@ -102,6 +102,9 @@
           },
           "$other": {
             ".validate": false
+          },
+          "stats": {
+            ".validate": "newData.isString() && newData.val().length <= 250000"
           }
         },
         "revision": {

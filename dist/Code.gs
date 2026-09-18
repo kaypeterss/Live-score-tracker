@@ -252,7 +252,7 @@ function syncFirebaseScoreboard(){
     const games=firebaseRequest_('games',token)||{};
     Object.values(config.tables).forEach(t=>{
       let data=games[t.id];if(!data){data={...blankState_(),revision:0};firebaseRequest_('games/'+t.id,token,'put',data);}
-      const hash=JSON.stringify(data),key='firebaseOutput-'+t.id;if(props.getProperty(key)===hash)return;
+      const hash=sheetOutputHash_(data),key='firebaseOutput-'+t.id;if(props.getProperty(key)===hash)return;
       const sheet=tableSheet_(book,t);writeTable_(sheet,data);sheet.getRange('A28:F28').merge().setValue('Firebase scoreboard · updated '+Utilities.formatDate(new Date(),book.getSpreadsheetTimeZone(),'yyyy-MM-dd HH:mm:ss')).setFontSize(10);props.setProperty(key,hash);
     });SpreadsheetApp.flush();
   }finally{lock.releaseLock();}
@@ -269,7 +269,7 @@ function exportTableToSheet(tableId){
     let table=JSON.parse(cache.get(tableKey)||'null');
     if(!table){table=firebaseRequest_('config/tables/'+tableId,token);if(!table)throw new Error('This table is inactive.');cache.put(tableKey,JSON.stringify(table),60);}
     const data=firebaseRequest_('games/'+tableId,token);if(!data)throw new Error('No game data for this table.');
-    const props=PropertiesService.getScriptProperties(),hash=JSON.stringify(data),key='firebaseOutput-'+tableId;
+    const props=PropertiesService.getScriptProperties(),hash=sheetOutputHash_(data),key='firebaseOutput-'+tableId;
     if(props.getProperty(key)!==hash){
       const book=SpreadsheetApp.openById(SHEET_ID),sheet=book.getSheetByName('Game · '+tableId)||tableSheet_(book,table);
       writeTable_(sheet,data);sheet.getRange('A28').setValue('Firebase scoreboard · updated '+Utilities.formatDate(new Date(),book.getSpreadsheetTimeZone(),'yyyy-MM-dd HH:mm:ss'));
@@ -281,4 +281,13 @@ function exportTableToSheet(tableId){
 function sheetsBridgeHtml_(channel){
   const origin='https://aos-score-kay-sept17.kaypeters.chatgpt.site';
   return '<!doctype html><html><body><script>const origin='+JSON.stringify(origin)+',channel='+JSON.stringify(channel)+';function send(data){window.top.postMessage({type:"tt-sheets",channel,...data},origin)}window.addEventListener("message",event=>{if(event.origin!==origin||event.source!==window.top||event.data?.channel!==channel||event.data?.type!=="tt-export")return;const req=event.data;google.script.run.withSuccessHandler(result=>send({id:req.id,result})).withFailureHandler(error=>send({id:req.id,error:error.message||"Export failed"})).exportTableToSheet(req.table)});send({ready:true});<\/script></body></html>';
+}
+
+// Keep Script Properties bounded as the centrally stored statistics grow.
+// Statistics do not alter the visible Google Sheets scoreboard.
+function sheetOutputHash_(data){
+  const game={...data.game};delete game.stats;
+  const output={players:data.players,game,revision:data.revision};
+  const bytes=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,JSON.stringify(output),Utilities.Charset.UTF_8);
+  return bytes.map(b=>('0'+((b+256)%256).toString(16)).slice(-2)).join('');
 }
