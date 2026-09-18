@@ -81,7 +81,7 @@ export function summarize(record,now=Date.now()) {
   const current=turnIndex({t:record.game.turn,h:record.game.phase});
   const names=record.players.map(p=>p.name+' · '+p.faction),lead=scoreOf(record.players[0])-scoreOf(record.players[1]);
   return {x,names,time:time.map(r=>r.map(Math.round)),totalTime,cp,cpSpent,vp,bt,race,cumulativeTime,current,lead,leadChanges,firstBlood,biggest,
-    pace:record.players.map((p,i)=>totalTime[i]?(scoreOf(p)/(totalTime[i]/60000)).toFixed(1):'0.0'),
+    pace:record.players.map((p,i)=>totalTime[i]?(Math.max(0,scoreOf(p)-(x.partial?x.baseline[i]:0))/(totalTime[i]/60000)).toFixed(1):'0.0'),
     tacticPoints:record.players.map(p=>scoreOf(p)-p.baseVictory)};
 }
 export function statText(field,record,s=summarize(record)) {
