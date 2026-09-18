@@ -22,7 +22,7 @@ function apply(record,c,stepGame,catalogs){
     r.game={battleplan:c.battleplan,turn:0,phase:'-',active:0,starter:0,id:c.id,history:[]};
     r.players=c.players.map(p=>{choice(p.faction,catalogs.armies);if(!p.faction||p.tactics.length!==2||!p.tactics[0]||!p.tactics[1]||p.tactics[0]===p.tactics[1])throw new Error('Choose an army and two different battletactics.');p.tactics.forEach(t=>choice(t,catalogs.tactics));return {name:name(p.name),faction:p.faction,command:4,army:0,rage:0,fury:0,baseVictory:0,tactics:p.tactics.map(name=>({name,goals:[0,0,0]}))};});
   }else if(c.scope==='game'){
-    if(c.key==='advance'){if(r.game.turn===5&&r.game.phase==='END')throw new Error('The game has finished.');if((!r.game.turn||r.game.phase==='END')&&![1,2].includes(c.starter))throw new Error('Choose the starting player.');r.game=stepGame(r.game,c);}
+    if(c.key==='advance'){if(r.game.turn===5&&r.game.phase==='END')throw new Error('The game has finished.');if((!r.game.turn||r.game.phase==='END')&&![1,2].includes(c.starter))throw new Error('Choose the starting player.');if(!r.game.turn||r.game.phase==='END'){r.players.forEach(p=>p.command=Math.max(4,p.command));if(r.game.turn>=1){const lead=r.players[0].victory-r.players[1].victory;if(lead>0)r.players[1].command++;else if(lead<0)r.players[0].command++;}}r.game=stepGame(r.game,c);}
     else if(c.key==='back'){if(!r.game.turn)throw new Error('The game has not started.');r.game=stepGame(r.game,c);}
     else if(c.key==='battleplan')throw new Error('Battleplan is locked after game creation.');
     else if(c.key==='active'&&[0,1,2].includes(c.value))r.game.active=c.value;
