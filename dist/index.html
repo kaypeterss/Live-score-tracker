@@ -61,9 +61,16 @@ const goalNames=['Affray','Strike','Domination'];const live=true;
 const overlayParams=new URLSearchParams(location.search),overlayField=overlayParams.get('overlay'),overlayTable=overlayParams.get('table');
 function overlayText(field,game,players){
   const p1=players[0],p2=players[1],active=game.active?players[game.active-1]:null;
+  const tactic=(player,slot)=>player.tactics?.[slot]||{name:'',goals:[0,0,0]};
+  const tacticPoints=item=>item.goals.reduce((total,value)=>total+value,0);
+  const p1t1=tactic(p1,0),p1t2=tactic(p1,1),p2t1=tactic(p2,0),p2t2=tactic(p2,1);
   const values={
     'player1-name':p1.name,'player1-army':p1.faction||'','player1-vp':String(p1.victory),'player1-command-points':String(p1.command),'player1-army-points':String(p1.army),'player1-rage-dice':String(p1.rage),'player1-fury-level':String(p1.fury),'player1-battletactics-vp':String(p1.tacticPoints),
+    'player1-battletactic1-name':p1t1.name,'player1-battletactic1-points':String(tacticPoints(p1t1)),'player1-battletactic1-affray':String(p1t1.goals[0]),'player1-battletactic1-strike':String(p1t1.goals[1]),'player1-battletactic1-domination':String(p1t1.goals[2]),
+    'player1-battletactic2-name':p1t2.name,'player1-battletactic2-points':String(tacticPoints(p1t2)),'player1-battletactic2-affray':String(p1t2.goals[0]),'player1-battletactic2-strike':String(p1t2.goals[1]),'player1-battletactic2-domination':String(p1t2.goals[2]),
     'player2-name':p2.name,'player2-army':p2.faction||'','player2-vp':String(p2.victory),'player2-command-points':String(p2.command),'player2-army-points':String(p2.army),'player2-rage-dice':String(p2.rage),'player2-fury-level':String(p2.fury),'player2-battletactics-vp':String(p2.tacticPoints),
+    'player2-battletactic1-name':p2t1.name,'player2-battletactic1-points':String(tacticPoints(p2t1)),'player2-battletactic1-affray':String(p2t1.goals[0]),'player2-battletactic1-strike':String(p2t1.goals[1]),'player2-battletactic1-domination':String(p2t1.goals[2]),
+    'player2-battletactic2-name':p2t2.name,'player2-battletactic2-points':String(tacticPoints(p2t2)),'player2-battletactic2-affray':String(p2t2.goals[0]),'player2-battletactic2-strike':String(p2t2.goals[1]),'player2-battletactic2-domination':String(p2t2.goals[2]),
     'turn':game.turn?game.phase+' T'+game.turn:'Not started','active-army':active?(active.faction||active.name):'No active army',
     'battleplan':game.battleplan||''
   };
