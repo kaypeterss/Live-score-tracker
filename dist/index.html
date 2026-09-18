@@ -6,7 +6,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.19.0/fireba
 import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js';
 import { initializeDatabase, ref, get, onValue, runTransaction } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js';
 const firebaseConfig={apiKey:'AIzaSyDr3J7GBYLPXbXbzhfWqvKWcDr_MMo67L4',authDomain:'threshold-live.firebaseapp.com',projectId:'threshold-live',databaseURL:'https://threshold-live-default-rtdb.europe-west1.firebasedatabase.app',storageBucket:'threshold-live.firebasestorage.app',messagingSenderId:'368826443507',appId:'1:368826443507:web:f4c424d02e0a7ccbe43986'};
-const firebaseApp=initializeApp(firebaseConfig),auth=getAuth(firebaseApp),db=initializeDatabase(firebaseApp,{experimentalAutoDetectLongPolling:true});
+const firebaseApp=initializeApp(firebaseConfig),auth=getAuth(firebaseApp),db=initializeDatabase(firebaseApp,new URLSearchParams(location.search).has('overlay')?{experimentalForceLongPolling:true}:{});
 let config=null,records=null,subscribed=false,starting=false,connected=false;
 function normalize(record){const r=structuredClone(record);r.game.history=r.game.history||[];r.players.forEach(p=>{p.tacticPoints=p.tactics.reduce((n,t)=>n+t.goals.reduce((a,b)=>a+b,0),0);p.victory=p.baseVictory+p.tacticPoints;});return r;}
 function clean(record){const r=structuredClone(record);r.players.forEach(p=>{delete p.victory;delete p.tacticPoints;});return r;}
