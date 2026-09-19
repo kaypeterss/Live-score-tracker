@@ -84,7 +84,7 @@ function overlayText(field,game,players){
     'player2-name':p2.name,'player2-army':p2.faction||'','player2-vp':String(p2.victory),'player2-command-points':String(p2.command),'player2-army-points':String(p2.army),'player2-rage-dice':String(p2.rage),'player2-fury-level':String(p2.fury),'player2-battletactics-vp':String(p2.tacticPoints),
     'player2-battletactic1-name':p2t1.name,'player2-battletactic1-points':String(tacticPoints(p2t1)),'player2-battletactic1-affray':String(p2t1.goals[0]),'player2-battletactic1-strike':String(p2t1.goals[1]),'player2-battletactic1-domination':String(p2t1.goals[2]),
     'player2-battletactic2-name':p2t2.name,'player2-battletactic2-points':String(tacticPoints(p2t2)),'player2-battletactic2-affray':String(p2t2.goals[0]),'player2-battletactic2-strike':String(p2t2.goals[1]),'player2-battletactic2-domination':String(p2t2.goals[2]),
-    'turn':game.turn?game.phase+' T'+game.turn:'Not started','active-army':active?(active.faction||active.name):'No active army',
+    'turn':game.turn?game.phase+' T'+game.turn:'TBD','active-army':active?(active.faction||active.name):'No active army',
     'battleplan':game.battleplan||''
   };
   return values[field]||'';
