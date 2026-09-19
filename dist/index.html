@@ -71,7 +71,7 @@ const battleplanCards={
 };
 const metrics=[['Command Points','CP','command'],['Army Points','AP','army'],['Rage Dice','RD','rage'],['Fury Level','FL','fury'],['Victory Points','VP','victory']];
 const goalNames=['Affray','Strike','Domination'];const live=true;
-const overlayParams=new URLSearchParams(location.search),overlayField=overlayParams.get('overlay'),overlayTable=overlayParams.get('table');
+const overlayParams=new URLSearchParams(location.search),cleanOverlayParam=name=>(overlayParams.get(name)||'').replace(/\\+$/,''),overlayField=cleanOverlayParam('overlay'),overlayTable=cleanOverlayParam('table');
 function overlayText(field,game,players){
   const p1=players[0],p2=players[1],active=game.active?players[game.active-1]:null;
   const tactic=(player,slot)=>player.tactics?.[slot]||{name:'',goals:[0,0,0]};
