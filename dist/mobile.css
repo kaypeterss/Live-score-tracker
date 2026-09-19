@@ -2,6 +2,9 @@
 #mobilePlayerTabs,.mobile-tactics-toggle{display:none}
 #activeLabel span{display:block;margin-bottom:2px;color:#bdb0c9;font:800 9px "Archivo Expanded",Archivo,sans-serif;letter-spacing:.12em;text-transform:uppercase}
 #activeLabel strong{display:block;font:800 14px "Archivo Condensed",Archivo,sans-serif;letter-spacing:.05em;text-transform:uppercase}
+body:not(.hosted) .statusline{position:fixed;left:8px;bottom:calc(6px + env(safe-area-inset-bottom));z-index:20;min-height:0;margin:0;pointer-events:none}
+body:not(.hosted) #status{max-width:calc(100vw - 16px);padding:3px 6px;border:1px solid #4a3d57;border-radius:4px;background:#171323d9;color:#a9a0b3;font-size:10px;line-height:1.2}
+body:not(.hosted) .statusline .actions{display:none}
 @media (max-width:600px){
   body{background:#171323}
   main{padding:5px 8px}
