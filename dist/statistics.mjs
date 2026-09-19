@@ -50,6 +50,7 @@ export function updateStats(before,after,change) {
     if(d)x.events.push({a:now,p:p+1,t:g.turn,h:g.phase,d,k,l});
   }
   if(switched)x.events.push({a:now,p:g.active,t:g.turn,h:g.phase,d:0,k:'turn',l:g.turn?g.phase+' T'+g.turn:'Game not started'});
+  if(g.doubleTurn&&(old.turn!==g.turn||old.doubleTurn!==g.doubleTurn))x.events.push({a:now,p:g.doubleTurn,t:g.turn,h:g.phase,d:0,k:'double-turn',l:'Double turn · Battle Round '+g.turn});
   // Bounded for a five-round game. Retain scoring baseline if very old events roll off.
   if(x.events.length>600){for(const e of x.events.splice(0,x.events.length-600))if(['victory','goal','tactic'].includes(e.k)&&e.p)x.baseline[e.p-1]+=e.d;x.partial=true;}
   x.segments=x.segments.slice(-500);
@@ -78,9 +79,10 @@ export function summarize(record,now=Date.now()) {
   for(const e of x.events)if(turnIndex(e)<0&&['victory','goal','tactic'].includes(e.k)&&e.p)running[e.p-1]+=e.d;
   for(let i=0;i<10;i++){for(let p=0;p<2;p++){running[p]+=vp[p][i]+bt[p][i];race[p][i]=running[p];}}
   const cumulativeTime=time.map(row=>{let sum=0;return row.map(v=>Math.round(sum+=v));});
+  const doubleTurns=x.events.filter(e=>e.k==='double-turn'&&[1,2].includes(e.p));
   const current=turnIndex({t:record.game.turn,h:record.game.phase});
   const names=record.players.map(p=>p.name+' · '+p.faction),lead=scoreOf(record.players[0])-scoreOf(record.players[1]);
-  return {x,names,time:time.map(r=>r.map(Math.round)),totalTime,cp,cpSpent,vp,bt,race,cumulativeTime,current,lead,leadChanges,firstBlood,biggest,
+  return {x,names,time:time.map(r=>r.map(Math.round)),totalTime,cp,cpSpent,vp,bt,race,cumulativeTime,current,lead,leadChanges,firstBlood,biggest,doubleTurns,
     pace:record.players.map((p,i)=>totalTime[i]?(Math.max(0,scoreOf(p)-(x.partial?x.baseline[i]:0))/(totalTime[i]/60000)).toFixed(1):'0.0'),
     tacticPoints:record.players.map(p=>scoreOf(p)-p.baseVictory)};
 }
