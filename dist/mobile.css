@@ -1,5 +1,7 @@
 /* Phone scorecard view. Tablet and desktop keep the existing two-player layout. */
 #mobilePlayerTabs,.mobile-tactics-toggle{display:none}
+#activeLabel span{display:block;margin-bottom:2px;color:#bdb0c9;font:800 9px "Archivo Expanded",Archivo,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+#activeLabel strong{display:block;font:800 14px "Archivo Condensed",Archivo,sans-serif;letter-spacing:.05em;text-transform:uppercase}
 @media (max-width:600px){
   body{background:#171323}
   main{padding:5px 8px}
@@ -18,7 +20,7 @@
   .game{padding:7px;gap:5px;margin-bottom:5px;border-radius:9px}
   .battleplan-row{gap:6px}.battleplan-name{font-size:15px;max-width:calc(100% - 112px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .battleplan-info{min-height:30px;padding:4px 7px;font-size:11px}
-  .game-note#activeLabel{display:inline-block;margin:4px 0 0;padding:4px 7px;font-size:12px;border-width:1px}
+  .game-note#activeLabel{display:inline-block;margin:4px 0 0;padding:4px 7px;font-size:12px;border-width:1px}.game-note#activeLabel span{font-size:8px}.game-note#activeLabel strong{font-size:12px}
   .turn-caption{font-size:9px}.turn-display{font-size:20px;margin:1px 0}.next-display{font-size:11px;padding:0 0 3px}
   .turn-actions{display:grid;grid-template-columns:1fr 1fr;gap:4px}.turn-actions button{min-height:33px;padding:4px;font-size:11px}
   #mobilePlayerTabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;position:sticky;top:0;z-index:4;padding:5px 0;background:#171323}
