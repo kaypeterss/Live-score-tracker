@@ -73,6 +73,9 @@
           "starter": {
             ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 2 && newData.val() % 1 == 0"
           },
+          "doubleTurn": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 2 && newData.val() % 1 == 0"
+          },
           "battleplan": {
             ".validate": "newData.isString() && newData.val().length <= 200 && !newData.val().beginsWith('=') && !newData.val().beginsWith('+') && !newData.val().beginsWith('-') && !newData.val().beginsWith('@')"
           },
@@ -93,6 +96,9 @@
                 ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 2 && newData.val() % 1 == 0"
               },
               "starter": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 2 && newData.val() % 1 == 0"
+              },
+              "doubleTurn": {
                 ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 2 && newData.val() % 1 == 0"
               },
               "$other": {
